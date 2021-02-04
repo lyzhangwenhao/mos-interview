@@ -29,18 +29,15 @@ public class SkuAnalyzeServiceImpl implements SkuAnalyzeService {
         if (list == null || list.size() == 0) {
             return null;
         }
-        list.sort(new Comparator<SkuDO>() {
-            @Override
-            public int compare(SkuDO o1, SkuDO o2) {
-                float p1 = o1.getPrice().floatValue();
-                float p2 = o2.getPrice().floatValue();
-                if (p1 < p2) {
-                    return -1;
-                } else if (p1 == p2) {
-                    return 0;
-                } else {
-                    return 1;
-                }
+        list.sort((o1, o2) -> {
+            float p1 = o1.getPrice().floatValue();
+            float p2 = o2.getPrice().floatValue();
+            if (p1 < p2) {
+                return -1;
+            } else if (p1 == p2) {
+                return 0;
+            } else {
+                return 1;
             }
         });
         return list.get(list.size() / 2).getId();
@@ -78,12 +75,7 @@ public class SkuAnalyzeServiceImpl implements SkuAnalyzeService {
         Map<String, List<String>> resultMap = new HashMap<>();
         allDataMap.forEach((channelCode,map)->{
             List<Map.Entry<String, BigDecimal>> sortList = new ArrayList<>(map.entrySet());
-            sortList.sort(new Comparator<Map.Entry<String, BigDecimal>>() {
-                @Override
-                public int compare(Map.Entry<String, BigDecimal> o1, Map.Entry<String, BigDecimal> o2) {
-                    return o2.getValue().compareTo(o1.getValue());
-                }
-            });
+            sortList.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
             List<String> skuIDList = new ArrayList<>();
             sortList.stream().limit(5).forEach(limitList->{
                 skuIDList.add(limitList.getKey());
